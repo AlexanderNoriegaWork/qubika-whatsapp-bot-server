@@ -39,7 +39,7 @@ export default async function handler(req, res) {
   try {
     const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
     console.log("[WEBHOOK] incomingMessage", incomingMessage);
-    await reply();
+    // await reply();
   } catch (e) {
     console.log("Could not log incoming message", e.message);
   }
