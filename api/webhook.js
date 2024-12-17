@@ -15,4 +15,4 @@ export default async function handler(req, res) {
   }
 }
 
-// https://qubika-whatsapp-bot-server.vercel.app/api/webhook?hub.mode=subscribe&hub.verify_token=%22qubika1234%22&hub.challenge=5678
+// https://qubika-whatsapp-bot-server.vercel.app/api/webhook?hub.mode=subscribe&hub.verify_token=qubika1234&hub.challenge=5678
