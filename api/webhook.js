@@ -22,13 +22,12 @@ const reply = async () => {
       'Content-Type': 'application/json',
     },
   };
-  axios.post(url, data, config)
-    .then(response => {
-      console.log('Message sent successfully:', response.data);
-    })
-    .catch(error => {
-      console.error('Error sending message:', error);
-    });
+  try {
+    const response = await axios.post(url, data, config)
+    console.log('Message sent successfully:', response.data);
+  } catch (e) {
+    console.error('Error sending message:', error);
+  }
 }
 
 export default async function handler(req, res) {
@@ -40,6 +39,7 @@ export default async function handler(req, res) {
   try {
     const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
     console.log("[WEBHOOK] incomingMessage", incomingMessage);
+    await reply();
   } catch (e) {
     console.log("Could not log incoming message", e.message);
   }
@@ -50,7 +50,6 @@ export default async function handler(req, res) {
     console.log("Webhook verified successfully!");
   } else {
     // hardcoded reply to a specific number
-    reply();
     res.status(403).end();
   }
 }
