@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
-  console.log("WEBHOOK RECEIVED SOMETHING", req.body);
+  console.log("WEBHOOK RECEIVED SOMETHING", JSON.stringify(req.body));
   // check the mode and token sent are correct
   if (mode === "subscribe" && token === process.env.WEBHOOK_VERIFY_TOKEN) {
     // respond with 200 OK and challenge token from the request
