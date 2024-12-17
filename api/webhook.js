@@ -6,6 +6,12 @@ export default async function handler(req, res) {
   const challenge = req.query["hub.challenge"];
 
   console.log("WEBHOOK RECEIVED SOMETHING", JSON.stringify(req.body));
+  try {
+    const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
+    console.log("incomingMessage", incomingMessage);
+  } catch (e) {
+    console.log("Could not log incoming message", e.message);
+  }
   // check the mode and token sent are correct
   if (mode === "subscribe" && token === process.env.WEBHOOK_VERIFY_TOKEN) {
     // respond with 200 OK and challenge token from the request
