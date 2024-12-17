@@ -26,7 +26,7 @@ const reply = async () => {
     const response = await axios.post(url, data, config)
     console.log('Message sent successfully:', response.data);
   } catch (e) {
-    console.error('Error sending message:', error);
+    console.error('Error sending message:', e);
   }
 }
 
