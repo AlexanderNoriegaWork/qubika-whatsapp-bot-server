@@ -38,29 +38,39 @@ const reply = async () => {
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const mode = req.query["hub.mode"];
-  const token = req.query["hub.verify_token"];
-  const challenge = req.query["hub.challenge"];
-
   console.log("[WEBHOOK-TS] RECEIVED SOMETHING", JSON.stringify(req.body));
+
+  // HANDLE MESSAGING
   try {
     const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
     console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
-    await reply();
-    // Must return status 200, otherwise Meta will take it
-    // as delivery failure, and retry sending the message.
-    res.status(200).send(`Message received: ${incomingMessage}`);
+    try {
+      await reply();
+    } catch (e) {
+      // Must return status 200, otherwise Meta will take it
+      // as delivery failure, and retry sending the message.
+      res.status(200).send(`Message received: ${incomingMessage}`);
+    }
   } catch (e) {
     logUnknownError("[reply()] Could not log incoming message:", e);
   }
-  // check the mode and token sent are correct
-  if (mode === "subscribe" && token === process.env.WEBHOOK_VERIFY_TOKEN) {
-    // respond with 200 OK and challenge token from the request
-    res.status(200).send(challenge);
-    console.log("[WEBHOOK-TS] verified successfully!");
+
+  // HANDLE WEBHOOK VERIFICATION (SHOULD ONLY HAPPEN ONCE EVER)
+
+  const mode = req.query["hub.mode"];
+  if (mode === "subscribe") {
+    const token = req.query["hub.verify_token"];
+    const challenge = req.query["hub.challenge"];
+    if (token === process.env.WEBHOOK_VERIFY_TOKEN) {
+      res.status(200).send(challenge);
+      console.log("[WEBHOOK-TS] verified successfully!");
+    } else {
+      res.status(403).end();
+      console.log("[WEBHOOK-TS] could not verify webhook token!");
+    }
   } else {
-    // hardcoded reply to a specific number
-    res.status(403).end();
+    res.status(200).end();
+    console.log("[handler()] Unknown request. Responding with empty 200.");
   }
 }
 
