@@ -5,7 +5,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@vercel/node": "^5.0.0",
     "axios": "1.7.9",
+    "typescript": "^5.7.2",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
   }
 }
