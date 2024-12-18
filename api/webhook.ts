@@ -45,9 +45,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Must return status 200, otherwise Meta will take it
       // as delivery failure, and retry sending the message.
       res.status(200).send(`Message received: ${incomingMessage}`);
+      return;
     } catch (e) {
       res.status(500).end();
       logUnknownError("Could not reply():", e);
+      return;
     }
   } catch (e) {
     // Could not parse an incomingMessage.
