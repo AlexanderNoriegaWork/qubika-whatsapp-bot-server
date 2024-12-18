@@ -29,12 +29,8 @@ const reply = async () => {
       "Content-Type": "application/json",
     },
   };
-  try {
-    const response = await axios.post(url, data, config);
-    console.log("Message sent successfully:", response.data);
-  } catch (e: unknown) {
-    logUnknownError("[reply()] Error sending message:", e);
-  }
+  const response = await axios.post(url, data, config);
+  console.log("Message sent successfully:", response.data);
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -46,13 +42,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
     try {
       await reply();
-    } catch (e) {
       // Must return status 200, otherwise Meta will take it
       // as delivery failure, and retry sending the message.
       res.status(200).send(`Message received: ${incomingMessage}`);
+    } catch (e) {
+      res.status(500).end();
+      logUnknownError("Could not reply():", e);
     }
   } catch (e) {
-    logUnknownError("[reply()] Could not log incoming message:", e);
+    // Could not parse an incomingMessage.
+    // Do nothing, as this could be another type of
+    // interaction (user status update, or something).
   }
 
   // HANDLE WEBHOOK VERIFICATION (SHOULD ONLY HAPPEN ONCE EVER)
