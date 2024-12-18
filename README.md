@@ -1,3 +1,10 @@
+## Infra
+
+### Vercel
+
+#### Docs
+
+https://vercel.com/docs/functions/runtimes/node-js
 
 ## WhatsApp API Rules
 
