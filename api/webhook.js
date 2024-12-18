@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
+const WHATSAPP_API_ACCESS_TOKEN = process.env.WHATSAPP_API_ACCESS_TOKEN;
+
 const reply = async () => {
-  const accessToken = 'EAARdOZAn9v8YBO0yj56ZAqOMVLhkZB5UPMYXD6lWBwRYeYSa4SxuLMB9j3fDK3DiIgs7RZAqgad5zN46yj4WdCZBk0ZBgbyZCAbo88IjgAx0ffIQcvKNXkJZCxuKUOqik7Vq3fdJgopvkBq5OJHvnel5BKaTjP9bLrhOE648DpUOZCahDfeZB3EYAQgrFRxlChXBXOOLHJ3D9hk176WbGBsfW0sC0HwONgSLo8joQZD'; 
+  const accessToken = WHATSAPP_API_ACCESS_TOKEN;
   const recipientId = '54111569322090'; // Replace with actual recipient ID
   const url = `https://graph.facebook.com/v21.0/540896029101739/messages`;
   const data = {
