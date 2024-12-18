@@ -46,7 +46,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
     console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
-    // await reply();
+    await reply();
+    // Must return status 200, otherwise Meta will take it
+    // as delivery failure, and retry sending the message.
+    res.status(200).send(`Message received: ${incomingMessage}`);
   } catch (e) {
     logUnknownError("[reply()] Could not log incoming message:", e);
   }
