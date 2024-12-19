@@ -7,17 +7,53 @@ const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
-type ReplyArgs = {
-  RecipientID: `${number}`;
+type WhatsAppPhoneID = string;
+
+type WhatsAppContact = {
+  profile: {
+    name: string;
+  };
+  wa_id: WhatsAppPhoneID;
 };
 
-type WhatsAppID = string;
+type WhatsAppMessage = {
+  from: WhatsAppPhoneID;
+  id: string;
+  timestamp: string;
+  text: {
+    body: string;
+  };
+  type: "text";
+};
+
+type WhatsAppChange = {
+  value: {
+    messaging_product: "whatsapp";
+    metadata: {
+      display_phone_number: string;
+      phone_number_id: WhatsAppPhoneID;
+    };
+    contacts: WhatsAppContact[];
+    messages: WhatsAppMessage[];
+  };
+  field: "messages";
+};
+
+type WhatsAppEntry = {
+  id: WhatsAppPhoneID;
+  changes: WhatsAppChange[];
+};
+
+type WhatsAppRequest = {
+  object: "whatsapp_business_account";
+  entry: WhatsAppEntry[];
+};
 
 const reply = async () => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
-  const recipientId: WhatsAppID = "54111569322090"; // TODO: Dehardcode
+  const recipientId: WhatsAppPhoneID = "54111569322090"; // TODO: Dehardcode
   // const url = `https://graph.facebook.com/v21.0/540896029101739/messages`;
-  const senderPhoneNumberId: WhatsAppID = `540896029101739`;
+  const senderPhoneNumberId: WhatsAppPhoneID = `540896029101739`;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
     messaging_product: "whatsapp",
@@ -45,7 +81,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // HANDLE MESSAGING
   try {
-    const incomingMessage = req.body.entry[0].changes[0].value.messages[0].text;
+    const wppReq: WhatsAppRequest = req.body;
+    const firstEntry = wppReq.entry[0];
+    // const incomingMessage = wppReq.entry[0].changes[0].value.messages[0].text;
+    const incomingMessage = firstEntry.changes[0].value.messages[0].text;
     console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
     try {
       await reply();
