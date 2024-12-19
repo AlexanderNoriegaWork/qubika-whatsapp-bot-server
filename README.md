@@ -1,3 +1,16 @@
+## Development workflow
+
+1. Log into facebook (meta).
+2. Log into developers.facebook.com.
+3. Search for your app and its Whatsapp product that you added to it.
+4. Load the "App Dashboard".
+    - Note: URL is something like `https://developers.facebook.com/apps/<APP-ID>/whatsapp-business/wa-dev-console/?business_id=<WHATSAPP-BUSINESS-ID>`
+5. (Re)generate the Access Token.
+    - Note: This access token constantly expires (every couple hours or something).
+6. Set it in the appropriate environment variable.
+    - Eg. Env vars settings in the Vercel lambda.
+    - Note: URL is something like `https://vercel.com/<YOUR-GITHUB-REPO>-projects/<REPO-NAME>/settings/environment-variables`.
+
 ## Infra
 
 ### Vercel
