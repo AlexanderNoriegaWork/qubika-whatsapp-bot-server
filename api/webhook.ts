@@ -1,17 +1,24 @@
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const WHATSAPP_API_ACCESS_TOKEN = process.env.WHATSAPP_API_ACCESS_TOKEN;
+const { WHATSAPP_API_ACCESS_TOKEN, WHATSAPP_API_BASE_URL } = process.env;
 
 const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
+type ReplyArgs = {
+  RecipientID: `${number}`;
+};
+
+type WhatsAppID = string;
+
 const reply = async () => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
-  const recipientId = "54111569322090"; // Replace with actual recipient ID
-  const url = `https://graph.facebook.com/v21.0/540896029101739/messages`;
+  const recipientId: WhatsAppID = "54111569322090"; // TODO: Dehardcode
+  // const url = `https://graph.facebook.com/v21.0/540896029101739/messages`;
+  const senderPhoneNumberId: WhatsAppID = `540896029101739`;
+  const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
     messaging_product: "whatsapp",
     to: recipientId,
