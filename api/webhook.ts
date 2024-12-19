@@ -13,7 +13,19 @@ const logUnknownError = (msg: string, e: unknown) => {
 
 const reply = async (message: WhatsAppMessage) => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
+
+  // This .replace() is because the Allowed Phone Numbers list
+  // used during development has them in different format than
+  // the one received from the actual Argentinian phones.
+  //
+  // So this .replace() makes the incoming phone number data match
+  // the respective entries on the Allowed Phone Numbers list.
+  //
+  // TODO: Either figure out a non-hacky normalization solution,
+  // or remove this if you upgrade to a full business app
+  // that can phone any number, ie. isn't restricted by an Allowed Numbers list.
   const recipientId: WhatsAppPhoneID = message.from.replace(/^54911/, "541115");
+
   const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
