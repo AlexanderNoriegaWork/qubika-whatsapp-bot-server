@@ -28,7 +28,7 @@ const reply = async (message: WhatsAppMessage) => {
   // or remove this, when/if you upgrade to a full business app
   // that can phone any number, ie. isn't restricted by an Allowed Numbers list.
   //
-  // (Already checked libphonenumber-js 3rd party lib. Doesn't cut it.)
+  // (Already tried libphonenumber-js 3rd-party lib. Didn't cut it.)
   const recipientId: WhatsAppPhoneID = message.from.replace(/^54911/, "541115");
 
   const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
