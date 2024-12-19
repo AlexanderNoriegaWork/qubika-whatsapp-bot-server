@@ -13,7 +13,8 @@ const logUnknownError = (msg: string, e: unknown) => {
 
 const reply = async (message: WhatsAppMessage) => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
-  const recipientId: WhatsAppPhoneID = message.from;
+  // const recipientId: WhatsAppPhoneID = message.from;
+  const recipientId: WhatsAppPhoneID = message.id;
   const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
