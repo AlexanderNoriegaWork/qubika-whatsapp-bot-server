@@ -1,7 +1,11 @@
 import axios from "axios";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const { WHATSAPP_API_ACCESS_TOKEN, WHATSAPP_API_BASE_URL, WHATSAPP_BOT_PHONE_NUMBER_ID } = process.env;
+const {
+  WHATSAPP_API_ACCESS_TOKEN,
+  WHATSAPP_API_BASE_URL,
+  WHATSAPP_BOT_PHONE_NUMBER_ID,
+} = process.env;
 
 const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
@@ -29,6 +33,12 @@ const reply = async (message: WhatsAppMessage) => {
       "Content-Type": "application/json",
     },
   };
+  console.log(
+    "Try to POST to CloudAPI",
+    url,
+    JSON.stringify(data),
+    JSON.stringify(config),
+  );
   const response = await axios.post(url, data, config);
   console.log("Message sent successfully:", response.data);
 };
