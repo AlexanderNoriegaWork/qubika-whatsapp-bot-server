@@ -7,48 +7,6 @@ const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
-type WhatsAppPhoneID = string;
-
-type WhatsAppContact = {
-  profile: {
-    name: string;
-  };
-  wa_id: WhatsAppPhoneID;
-};
-
-type WhatsAppMessage = {
-  from: WhatsAppPhoneID;
-  id: string;
-  timestamp: string;
-  text: {
-    body: string;
-  };
-  type: "text";
-};
-
-type WhatsAppChange = {
-  value: {
-    messaging_product: "whatsapp";
-    metadata: {
-      display_phone_number: string;
-      phone_number_id: WhatsAppPhoneID;
-    };
-    contacts: WhatsAppContact[];
-    messages: WhatsAppMessage[];
-  };
-  field: "messages";
-};
-
-type WhatsAppEntry = {
-  id: WhatsAppPhoneID;
-  changes: WhatsAppChange[];
-};
-
-type WhatsAppRequest = {
-  object: "whatsapp_business_account";
-  entry: WhatsAppEntry[];
-};
-
 const reply = async () => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
   const recipientId: WhatsAppPhoneID = "54111569322090"; // TODO: Dehardcode
