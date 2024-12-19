@@ -1,17 +1,16 @@
 import axios from "axios";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const { WHATSAPP_API_ACCESS_TOKEN, WHATSAPP_API_BASE_URL } = process.env;
+const { WHATSAPP_API_ACCESS_TOKEN, WHATSAPP_API_BASE_URL, WHATSAPP_BOT_PHONE_NUMBER_ID } = process.env;
 
 const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
-const reply = async () => {
+const reply = async (message: WhatsAppMessage) => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
-  const recipientId: WhatsAppPhoneID = "54111569322090"; // TODO: Dehardcode
-  // const url = `https://graph.facebook.com/v21.0/540896029101739/messages`;
-  const senderPhoneNumberId: WhatsAppPhoneID = `540896029101739`;
+  const recipientId: WhatsAppPhoneID = message.from;
+  const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
     messaging_product: "whatsapp",
@@ -42,10 +41,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const wppReq: WhatsAppRequest = req.body;
     const firstEntry = wppReq.entry[0];
     // const incomingMessage = wppReq.entry[0].changes[0].value.messages[0].text;
-    const incomingMessage = firstEntry.changes[0].value.messages[0].text;
+    const firstMessage = firstEntry.changes[0].value.messages[0];
+    const incomingMessage = firstMessage.text;
     console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
     try {
-      await reply();
+      await reply(firstMessage);
       // Must return status 200, otherwise Meta will take it
       // as delivery failure, and retry sending the message.
       res.status(200).send(`Message received: ${incomingMessage}`);
