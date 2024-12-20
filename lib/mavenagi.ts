@@ -7,7 +7,7 @@ const {
   MAVENAGI_ORGANIZATION_ID,
 } = process.env;
 
-const MAVENAGI_API_BASE_URL = `https://www.mavenagi-apis.com/v1/conversations/conversation-0/ask`;
+const MAVENAGI_API_BASE_URL = `https://www.mavenagi-apis.com/v1/conversations/conversation-3/ask`;
 
 export const ask = async (text: string) => {
   const url = `${MAVENAGI_API_BASE_URL}`;

@@ -14,9 +14,10 @@ export const reply = async (message: WhatsAppMessage) => {
   const lastBotMessage = botMessages[botMessages.length - 1];
   const lastBotMessageText =
     lastBotMessage !== undefined
-      ? lastBotMessage.responses.reduce((acc, x) => (acc += x.text), "")
+      ? JSON.stringify(lastBotMessage.responses)
       : "";
   console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
+  console.log("[MAVEN API] Bot messages:", JSON.stringify(botMessages));
   console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
 
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
