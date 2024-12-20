@@ -28,12 +28,17 @@ export const ask = async (text: string) => {
       "X-Agent-Id": MAVENAGI_AGENT_ID,
     },
   };
-  console.log(
-    "Try to POST to MAVEN AGI API",
-    url,
-    JSON.stringify(data),
-    JSON.stringify(config),
-  );
-  const response = await axios.post(url, data, config);
-  return response;
+  try {
+    console.log(
+      "Try to POST to MAVEN AGI API",
+      url,
+      JSON.stringify(data),
+      JSON.stringify(config),
+    );
+    const response = await axios.post(url, data, config);
+    return response;
+  } catch (e) {
+    console.log("Could not POST to MAVEN AGI API", JSON.stringify(e));
+    throw e;
+  }
 };
