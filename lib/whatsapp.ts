@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ask } from "./mavenagi";
 
 const {
   WHATSAPP_API_ACCESS_TOKEN,
@@ -51,6 +52,8 @@ export const reply = async (message: WhatsAppMessage) => {
     JSON.stringify(data),
     JSON.stringify(config),
   );
-  const response = await axios.post(url, data, config);
-  console.log("Message sent successfully:", response.data);
+  const magiReponse = await ask("What is qubika?");
+  console.log("MAVEN API message sent successfully:", magiReponse.data);
+  const wppResponse = await axios.post(url, data, config);
+  console.log("WPP message sent successfully:", wppResponse.data);
 };
