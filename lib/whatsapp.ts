@@ -52,10 +52,14 @@ export const reply = async (message: WhatsAppMessage) => {
     JSON.stringify(data),
     JSON.stringify(config),
   );
-  const magiReponse = await ask("What is qubika?");
+  const axiosResponse = await ask("What is qubika?");
+  const magiResponse: MavenAGI.API.Response = axiosResponse.data;
+  const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
+  const lastBotMessage = botMessages[botMessages.length];
   console.log(
     "MAVEN API message sent successfully:",
-    JSON.stringify(magiReponse.data),
+    JSON.stringify(magiResponse),
+    JSON.stringify(lastBotMessage),
   );
   const wppResponse = await axios.post(url, data, config);
   console.log(

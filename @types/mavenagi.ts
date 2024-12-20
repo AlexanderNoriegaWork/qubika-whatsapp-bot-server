@@ -1,4 +1,10 @@
-namespace MavenAGI {
+declare namespace MavenAGI {
+  namespace Conversation {
+    export type Response = {
+      type: "text";
+      text: string;
+    };
+  }
   type Capability = "MARKDOWN" | "FORMS" | "IMAGES";
   type ResponseLength = "MEDIUM";
   type DateString = string;
@@ -9,14 +15,21 @@ namespace MavenAGI {
     organizationId: string;
     agentId: string;
   };
+  type MessageID = {
+    referenceId: string;
+    type: "CONVERSATION_MESSAGE";
+    appId: string;
+    organizationId: string;
+    agentId: string;
+  };
   type Message =
     | {
         type: "bot";
         createdAt: DateString;
         updatedAt: DateString;
-        conversationMessageId: unknown;
+        conversationMessageId: MessageID;
         botMessageType: "BOT_RESPONSE";
-        responses: unknown[];
+        responses: Conversation.Response[];
         metadata: unknown;
       }
     | {
@@ -39,7 +52,7 @@ namespace MavenAGI {
     sentiment: string;
   };
   namespace API {
-    type Response = {
+    export type Response = {
       responseConfig: {
         capabilities: Capability[];
         isCopilot: boolean;
