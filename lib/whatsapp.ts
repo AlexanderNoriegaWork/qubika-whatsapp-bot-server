@@ -53,7 +53,13 @@ export const reply = async (message: WhatsAppMessage) => {
     JSON.stringify(config),
   );
   const magiReponse = await ask("What is qubika?");
-  console.log("MAVEN API message sent successfully:", magiReponse.data);
+  console.log(
+    "MAVEN API message sent successfully:",
+    JSON.stringify(magiReponse.data),
+  );
   const wppResponse = await axios.post(url, data, config);
-  console.log("WPP message sent successfully:", wppResponse.data);
+  console.log(
+    "WPP message sent successfully:",
+    JSON.stringify(wppResponse.data),
+  );
 };
