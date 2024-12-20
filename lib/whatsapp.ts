@@ -8,6 +8,13 @@ const {
 } = process.env;
 
 export const reply = async (message: WhatsAppMessage) => {
+  const axiosResponse = await ask("What is qubika?");
+  const magiResponse: MavenAGI.API.Response = axiosResponse.data;
+  const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
+  const lastBotMessage = botMessages[botMessages.length - 1];
+  console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
+  console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
+
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
 
   // HACK: The `.from.replace()` below is because the list of Allowed
@@ -26,12 +33,17 @@ export const reply = async (message: WhatsAppMessage) => {
   //
   // (Already tried libphonenumber-js 3rd-party lib. Didn't cut it.)
   const recipientId: WhatsAppPhoneID = message.from.replace(/^54911/, "541115");
-
   const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {
     messaging_product: "whatsapp",
     to: recipientId,
+    type: "text",
+    text: {
+      preview_url: false,
+      body: JSON.stringify(lastBotMessage.responses),
+    },
+    /*
     type: "template",
     template: {
       name: "hello_world",
@@ -39,6 +51,7 @@ export const reply = async (message: WhatsAppMessage) => {
         code: "en_US",
       },
     },
+    */
   };
   const config = {
     headers: {
@@ -52,12 +65,6 @@ export const reply = async (message: WhatsAppMessage) => {
     JSON.stringify(data),
     JSON.stringify(config),
   );
-  const axiosResponse = await ask("What is qubika?");
-  const magiResponse: MavenAGI.API.Response = axiosResponse.data;
-  const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
-  const lastBotMessage = botMessages[botMessages.length - 1];
-  console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
-  console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
   const wppResponse = await axios.post(url, data, config);
   console.log(
     "WPP message sent successfully:",
