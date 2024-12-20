@@ -22,7 +22,7 @@ export const ask = async (text: string) => {
   };
   const config = {
     headers: {
-      Authorization: `Bearer ${MAVENAGI_APP_ID}:${MAVENAGI_APP_SECRET}`,
+      Authorization: `Bearer ${Buffer.from(`${MAVENAGI_APP_ID}:${MAVENAGI_APP_SECRET}`).toString("base64")}`,
       "Content-Type": "application/json",
       "X-Organization-Id": MAVENAGI_ORGANIZATION_ID,
       "X-Agent-Id": MAVENAGI_AGENT_ID,
