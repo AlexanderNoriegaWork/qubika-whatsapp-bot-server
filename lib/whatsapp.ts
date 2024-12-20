@@ -55,7 +55,7 @@ export const reply = async (message: WhatsAppMessage) => {
   const axiosResponse = await ask("What is qubika?");
   const magiResponse: MavenAGI.API.Response = axiosResponse.data;
   const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
-  const lastBotMessage = botMessages[botMessages.length];
+  const lastBotMessage = botMessages[botMessages.length - 1];
   console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
   console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
   const wppResponse = await axios.post(url, data, config);
