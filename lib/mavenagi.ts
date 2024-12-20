@@ -13,7 +13,7 @@ export const ask = async (text: string) => {
   const url = `${MAVENAGI_API_BASE_URL}`;
   const data = {
     conversationMessageId: {
-      referenceId: "test-id-2",
+      referenceId: new Date().toISOString(),
     },
     userId: {
       referenceId: "test-user-2",
