@@ -8,10 +8,14 @@ const {
 } = process.env;
 
 export const reply = async (message: WhatsAppMessage) => {
-  const axiosResponse = await ask("What is qubika?");
+  const axiosResponse = await ask(message.text.body);
   const magiResponse: MavenAGI.API.Response = axiosResponse.data;
   const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
   const lastBotMessage = botMessages[botMessages.length - 1];
+  const lastBotMessageText =
+    lastBotMessage !== undefined
+      ? lastBotMessage.responses.reduce((acc, x) => (acc += x.text), "")
+      : "";
   console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
   console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
 
@@ -41,7 +45,7 @@ export const reply = async (message: WhatsAppMessage) => {
     type: "text",
     text: {
       preview_url: false,
-      body: JSON.stringify(lastBotMessage.responses),
+      body: lastBotMessageText,
     },
     /*
     type: "template",
