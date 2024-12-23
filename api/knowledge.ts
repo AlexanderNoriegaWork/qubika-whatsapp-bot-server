@@ -11,7 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     // Extract file from request body
     const file = req.body;
-    console.log(`${LOG_CTX}`, file);
+    console.log(`${LOG_CTX}`, file, typeof file, file instanceof Buffer);
 
     if (!file) {
       return res
