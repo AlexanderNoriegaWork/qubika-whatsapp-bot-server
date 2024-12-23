@@ -39,3 +39,9 @@ type WhatsAppRequest = {
   object: "whatsapp_business_account";
   entry: WhatsAppEntry[];
 };
+
+declare namespace WhatsApp {
+  type IncomingMessageRequest = WhatsAppRequest & {
+    __brand: "IncomingMessageRequest";
+  };
+}

@@ -1,38 +1,32 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { reply } from "../lib/whatsapp";
+import {
+  handleChatMessage,
+  isIncomingMessageRequest,
+} from "../lib/mavenagi-whatsapp-integration";
 
 const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log("[WEBHOOK-TS] RECEIVED SOMETHING", JSON.stringify(req.body));
+  console.log("[webhook] RECEIVED SOMETHING", JSON.stringify(req.body));
 
   // HANDLE MESSAGING
-  try {
-    const wppReq: WhatsAppRequest = req.body;
-    const firstEntry = wppReq.entry[0];
-    const firstMessage = firstEntry.changes[0].value.messages[0];
-    const incomingMessage = firstMessage.text;
-    console.log("[WEBHOOK-TS] incomingMessage", incomingMessage);
+  const { body } = req;
+  if (isIncomingMessageRequest(body)) {
     try {
-      await reply(firstMessage);
-      // Must return status 200, otherwise Meta will take it
-      // as delivery failure, and retry sending the message.
-      res.status(200).send(`Message received: ${incomingMessage}`);
-      return;
+      await handleChatMessage(body);
+      res.status(200).send(`Message handled`);
     } catch (e) {
       res.status(500).end();
-      logUnknownError("Could not reply():", e);
-      return;
+      logUnknownError("[webhook] Could not handle chat message", e);
     }
-  } catch (e) {
-    // Could not parse an incomingMessage.
-    // Do nothing, as this could be another type of
-    // interaction (user status update, or something).
+    return;
   }
 
-  // HANDLE WEBHOOK VERIFICATION (SHOULD ONLY HAPPEN ONCE EVER)
+  // HANDLE WEBHOOK VERIFICATION
+  // (should only happen once, or whenever the facebook app's
+  // whatsapp product's webhook URL config is modified).
 
   const mode = req.query["hub.mode"];
   if (mode === "subscribe") {

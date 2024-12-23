@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ask } from "./mavenagi";
+import { type AxiosResponse } from "axios";
 
 const {
   WHATSAPP_API_ACCESS_TOKEN,
@@ -7,19 +7,10 @@ const {
   WHATSAPP_BOT_PHONE_NUMBER_ID,
 } = process.env;
 
-export const reply = async (message: WhatsAppMessage) => {
-  const axiosResponse = await ask(message.text.body);
-  const magiResponse: MavenAGI.API.Response = axiosResponse.data;
-  const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
-  const lastBotMessage = botMessages[botMessages.length - 1];
-  const lastBotMessageText =
-    lastBotMessage !== undefined
-      ? JSON.stringify(lastBotMessage.responses)
-      : "";
-  console.log("[MAVEN API] Request successful:", JSON.stringify(magiResponse));
-  console.log("[MAVEN API] Bot messages:", JSON.stringify(botMessages));
-  console.log("[MAVEN API] Last bot message:", JSON.stringify(lastBotMessage));
-
+export const reply = async (
+  message: WhatsAppMessage,
+  outgoing: string,
+): Promise<AxiosResponse<any, any>> => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
 
   // HACK: The `.from.replace()` below is because the list of Allowed
@@ -46,7 +37,7 @@ export const reply = async (message: WhatsAppMessage) => {
     type: "text",
     text: {
       preview_url: false,
-      body: lastBotMessageText,
+      body: outgoing,
     },
     /*
     type: "template",
@@ -65,14 +56,15 @@ export const reply = async (message: WhatsAppMessage) => {
     },
   };
   console.log(
-    "Try to POST to CloudAPI",
+    "[lib/whatsapp] Trying to POST to CloudAPI",
     url,
     JSON.stringify(data),
     JSON.stringify(config),
   );
   const wppResponse = await axios.post(url, data, config);
   console.log(
-    "WPP message sent successfully:",
+    "[lib/whatsapp] Message sent successfully:",
     JSON.stringify(wppResponse.data),
   );
+  return wppResponse;
 };
