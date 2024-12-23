@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const response = await postDocument(file);
 
-    console.log(`${LOG_CTX} Document sent`, JSON.stringify(response));
+    console.log(`${LOG_CTX} Document sent`);
 
     return res.status(200).json({
       message: "File successfully processed and sent to third-party API.",
