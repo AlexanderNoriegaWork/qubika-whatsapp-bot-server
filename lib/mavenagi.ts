@@ -11,7 +11,7 @@ const MAVENAGI_API_BASE_URL = `https://www.mavenagi-apis.com/v1`;
 const LOG_CTX = "[lib/mavenagi]";
 
 export const ask = async (text: string) => {
-  const url = `${MAVENAGI_API_BASE_URL}/conversations/conversation-4/ask`;
+  const url = `${MAVENAGI_API_BASE_URL}/conversations/conversation-5/ask`;
   const data = {
     conversationMessageId: {
       referenceId: new Date().toISOString(),
