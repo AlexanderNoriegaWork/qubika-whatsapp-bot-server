@@ -22,6 +22,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       logUnknownError("[webhook] Could not handle chat message", e);
     }
     return;
+  } else {
+    console.log("[webhook/handler] Could not parse IncomingChangeRequest.");
   }
 
   // HANDLE WEBHOOK VERIFICATION
