@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     return;
   } else {
-    console.log("[webhook/handler] Could not parse IncomingChangeRequest.");
+    console.log("[webhook/handler] Could not parse IncomingMessageRequest.");
   }
 
   // HANDLE WEBHOOK VERIFICATION

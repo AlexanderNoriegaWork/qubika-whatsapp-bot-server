@@ -5,7 +5,7 @@ export const isIncomingMessageRequest = (
   x: any,
 ): x is WhatsApp.IncomingMessageRequest => {
   try {
-    return typeof x.entry[0].changes[0].value.messages[0].text === "string";
+    return typeof x.entry[0].changes[0].value.messages[0].text.body === "string";
   } catch (e) {
     return false;
   }
