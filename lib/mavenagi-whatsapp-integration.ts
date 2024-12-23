@@ -5,7 +5,9 @@ export const isIncomingMessageRequest = (
   x: any,
 ): x is WhatsApp.IncomingMessageRequest => {
   try {
-    return typeof x.entry[0].changes[0].value.messages[0].text.body === "string";
+    return (
+      typeof x.entry[0].changes[0].value.messages[0].text.body === "string"
+    );
   } catch (e) {
     return false;
   }
@@ -25,7 +27,9 @@ export const handleChatMessage = async (
   const lastBotMessage = botMessages[botMessages.length - 1];
   const lastBotMessageText =
     lastBotMessage !== undefined
-      ? JSON.stringify(lastBotMessage.responses)
+      ? lastBotMessage.responses.reduce((acc, x) => {
+          return x.type === "text" ? acc + x.text : acc;
+        }, "")
       : "";
   console.log(
     `${LOG_CTX} MavenAGI request successful:`,
