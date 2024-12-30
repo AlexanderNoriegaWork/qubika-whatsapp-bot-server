@@ -8,6 +8,8 @@ const logUnknownError = (msg: string, e: unknown) => {
   console.error(msg, e instanceof Error ? e.message : e);
 };
 
+export const maxDuration = 60; // Increase Vercel function timeout
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("[webhook] RECEIVED SOMETHING", JSON.stringify(req.body));
 
