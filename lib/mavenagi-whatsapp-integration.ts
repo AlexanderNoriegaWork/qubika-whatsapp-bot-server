@@ -22,6 +22,7 @@ export const handleChatMessage = async (
   const firstMessage = firstEntry.changes[0].value.messages[0];
   console.log(`${LOG_CTX} incomingMessage`, firstMessage.text);
   const axiosResponse = await ask(firstMessage.text.body);
+  console.log(`${LOG_CTX} got a raw response`, axiosResponse.data);
   const magiResponse: MavenAGI.API.Response = axiosResponse.data;
   const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
   const lastBotMessage = botMessages[botMessages.length - 1];
