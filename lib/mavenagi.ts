@@ -1,4 +1,5 @@
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 const {
   MAVENAGI_APP_ID,
@@ -18,7 +19,7 @@ export const ask = async (
   const url = `${MAVENAGI_API_BASE_URL}/conversations/${conversationId}/ask`;
   const data = {
     conversationMessageId: {
-      referenceId: new Date().toISOString(),
+      referenceId: uuidv4(),
     },
     userId: {
       referenceId: userId,
