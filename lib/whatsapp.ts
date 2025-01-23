@@ -7,6 +7,8 @@ const {
   WHATSAPP_BOT_PHONE_NUMBER_ID,
 } = process.env;
 
+const LOG_CTX = "[lib/whatsapp]";
+
 export const reply = async (
   message: WhatsAppMessage,
   outgoing: string,
@@ -56,14 +58,14 @@ export const reply = async (
     },
   };
   console.log(
-    "[lib/whatsapp] Trying to POST to CloudAPI",
+    `${LOG_CTX} Trying to POST to CloudAPI`,
     url,
     JSON.stringify(data),
     JSON.stringify(config),
   );
   const wppResponse = await axios.post(url, data, config);
   console.log(
-    "[lib/whatsapp] Message sent successfully:",
+    `${LOG_CTX} Message sent successfully:`,
     JSON.stringify(wppResponse.data),
   );
   return wppResponse;

@@ -5,9 +5,9 @@ const {
   MAVENAGI_AGENT_ID,
   MAVENAGI_APP_SECRET,
   MAVENAGI_ORGANIZATION_ID,
+  MAVENAGI_API_BASE_URL,
 } = process.env;
 
-const MAVENAGI_API_BASE_URL = `https://www.mavenagi-apis.com/v1`;
 const LOG_CTX = "[lib/mavenagi]";
 
 export const ask = async (text: string) => {

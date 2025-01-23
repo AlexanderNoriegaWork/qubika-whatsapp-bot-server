@@ -7,5 +7,6 @@ declare namespace NodeJS {
     MAVENAGI_AGENT_ID: string;
     MAVENAGI_ORGANIZATION_ID: string;
     MAVENAGI_APP_ID: string;
+    MAVENAGI_API_BASE_URL: string;
   }
 }
