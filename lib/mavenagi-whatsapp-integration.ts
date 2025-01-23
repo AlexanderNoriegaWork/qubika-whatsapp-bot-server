@@ -1,5 +1,5 @@
 import { ask } from "./mavenagi";
-import { reply } from "./whatsapp";
+import { replyTo } from "./whatsapp";
 
 export const isIncomingMessageRequest = (
   x: any,
@@ -21,7 +21,15 @@ export const handleChatMessage = async (
   const firstEntry = wppReq.entry[0];
   const firstMessage = firstEntry.changes[0].value.messages[0];
   console.log(`${LOG_CTX} incomingMessage`, firstMessage.text);
-  const axiosResponse = await ask(firstMessage.text.body);
+  const recipientId: WhatsAppPhoneID = firstMessage.from.replace(
+    /^54911/,
+    "541115",
+  );
+  const axiosResponse = await ask(
+    firstMessage.text.body,
+    recipientId,
+    recipientId,
+  );
   console.log(`${LOG_CTX} got a raw response`, axiosResponse.data);
   const magiResponse: MavenAGI.API.Response = axiosResponse.data;
   const botMessages = magiResponse.messages.filter((x) => x.type === "bot");
@@ -41,6 +49,5 @@ export const handleChatMessage = async (
     `${LOG_CTX} MavenAGI last bot message:`,
     JSON.stringify(lastBotMessage),
   );
-
-  return await reply(firstMessage, lastBotMessageText);
+  return await replyTo(recipientId, lastBotMessageText);
 };

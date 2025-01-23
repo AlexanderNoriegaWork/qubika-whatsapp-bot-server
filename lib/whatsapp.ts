@@ -9,8 +9,8 @@ const {
 
 const LOG_CTX = "[lib/whatsapp]";
 
-export const reply = async (
-  message: WhatsAppMessage,
+export const replyTo = async (
+  recipientId: WhatsAppPhoneID,
   outgoing: string,
 ): Promise<AxiosResponse<any, any>> => {
   const accessToken = WHATSAPP_API_ACCESS_TOKEN;
@@ -30,7 +30,6 @@ export const reply = async (
   // that can phone any number, ie. isn't restricted by an Allowed Numbers list.
   //
   // (Already tried libphonenumber-js 3rd-party lib. Didn't cut it.)
-  const recipientId: WhatsAppPhoneID = message.from.replace(/^54911/, "541115");
   const senderPhoneNumberId: WhatsAppPhoneID = WHATSAPP_BOT_PHONE_NUMBER_ID;
   const url = `${WHATSAPP_API_BASE_URL}/${senderPhoneNumberId}/messages`;
   const data = {

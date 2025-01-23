@@ -10,14 +10,18 @@ const {
 
 const LOG_CTX = "[lib/mavenagi]";
 
-export const ask = async (text: string) => {
-  const url = `${MAVENAGI_API_BASE_URL}/conversations/conversation-5/ask`;
+export const ask = async (
+  text: string,
+  conversationId: string,
+  userId: string,
+) => {
+  const url = `${MAVENAGI_API_BASE_URL}/conversations/${conversationId}/ask`;
   const data = {
     conversationMessageId: {
       referenceId: new Date().toISOString(),
     },
     userId: {
-      referenceId: "test-user-2",
+      referenceId: userId,
     },
     text,
   };
